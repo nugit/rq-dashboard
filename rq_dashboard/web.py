@@ -232,14 +232,24 @@ def list_jobs(queue_name, page):
 @blueprint.route('/workers.json')
 @jsonify
 def list_workers():
-    def serialize_queue_names(worker):
-        return [q.name for q in worker.queues]
+    def func_name(worker):
+        j = worker.get_current_job()
+        return j.func_name if j is not None else ''
+
+    def queue_name(worker):
+        j = worker.get_current_job()
+        return j.origin if j is not None else ''
+
+    def started_at(worker):
+        return serialize_date(worker.started_job_at)
 
     workers = [
         dict(
             name=worker.name,
             queues=serialize_queue_names(worker),
-            state=worker.get_state()
+            state=worker.get_state(), 
+            func_name=func_name(worker), 
+            started_at=started_at(worker)
         )
         for worker in Worker.all()
     ]

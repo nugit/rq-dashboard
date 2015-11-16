@@ -51,7 +51,9 @@
                 <tr>
                     <th style="width:48px">State</th>
                     <th>Worker</th>
-                    <th>Queues</th>
+                    <th>Queue</th>
+                    <th>Func</th>
+                    <th>Start time</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,7 +67,9 @@
             <tr data-role="worker">
                 <td><i class="icon-<%= d.state %>"></i></td>
                 <td><%= d.name %></td>
-                <td><%= d.queues.join(', ') %></td>
+                <td><%= d.queue %></td>
+                <td><%= d.func_name %></td>
+                <td><%= d.started_at %></td>
             </tr>
         </script>
 
