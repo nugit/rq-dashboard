@@ -258,5 +258,5 @@ def list_workers():
 
 @blueprint.context_processor
 def inject_interval():
-    interval = current_app.config.get('RQ_POLL_INTERVAL')
+    interval = current_app.config.get('RQ_POLL_INTERVAL', 2500)
     return dict(poll_interval=interval)
