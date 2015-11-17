@@ -246,7 +246,7 @@ def list_workers():
     workers = [
         dict(
             name=worker.name,
-            queues=serialize_queue_names(worker),
+            queue=queue_name(worker),
             state=worker.get_state(), 
             func_name=func_name(worker), 
             started_at=started_at(worker)
