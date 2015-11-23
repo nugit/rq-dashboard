@@ -53,7 +53,9 @@
                     <th>Worker</th>
                     <th>Queue</th>
                     <th>Func</th>
-                    <th>Start time</th>
+                    <th>Run time</th>
+                    <th>Args</th>
+                    <th>Kwargs</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,10 +68,12 @@
         <script name="worker-row" type="text/template">
             <tr data-role="worker">
                 <td><i class="icon-<%= d.state %>"></i></td>
-                <td><%= d.name %></td>
+                <td><%= d.name %> on <%= d.job_id %></td>
                 <td><%= d.queue %></td>
                 <td><%= d.func_name %></td>
-                <td><%= d.started_at %></td>
+                <td><%= d.run_time %></td>
+                <td><%= d.args %></td>
+                <td><%= d.kwargs %></td>
             </tr>
         </script>
 

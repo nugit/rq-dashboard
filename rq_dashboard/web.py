@@ -24,6 +24,7 @@ from flask import Blueprint, current_app, render_template, url_for
 from redis import Redis, from_url
 from rq import (Queue, Worker, cancel_job, get_failed_queue, pop_connection,
                 push_connection, requeue_job)
+from rq.utils import utcnow
 
 blueprint = Blueprint(
     'rq_dashboard',
@@ -232,24 +233,22 @@ def list_jobs(queue_name, page):
 @blueprint.route('/workers.json')
 @jsonify
 def list_workers():
-    def func_name(worker):
+    def get_job_dict(worker):
         j = worker.get_current_job()
-        return j.func_name if j is not None else ''
-
-    def queue_name(worker):
-        j = worker.get_current_job()
-        return j.origin if j is not None else ''
-
-    def started_at(worker):
-        return serialize_date(worker.started_job_at)
+        default = "No job"
+        return {"func_name":j.func_name if j is not None else default,
+                "queue":j.origin if j is not None else default,
+                "args":j._args if j is not None else default,
+                "kwargs":j._kwargs if j is not None else default,
+                "job_id":j.id if j is not None else default
+        }
 
     workers = [
         dict(
+            get_job_dict(worker),
             name=worker.name,
-            queue=queue_name(worker),
-            state=worker.get_state(), 
-            func_name=func_name(worker), 
-            started_at=started_at(worker)
+            state=worker.get_state(),
+            run_time=str(utcnow() - worker.started_job_at)
         )
         for worker in Worker.all()
     ]
