@@ -238,8 +238,8 @@ def list_workers():
         default = "No job"
         return {"func_name":j.func_name if j is not None else default,
                 "queue":j.origin if j is not None else default,
-                "args":j._args if j is not None else default,
-                "kwargs":j._kwargs if j is not None else default,
+                "args":"\n".join(str(a) for a in j._args) if j is not None else default,
+                "kwargs":"\n".join("%s:%s" % (str(k),str(v)) for k,v in j._kwargs.iteritems()) if j is not None else default,
                 "job_id":j.id if j is not None else default
         }
 
